@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/operation_top"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/Black"
+    android:layout_alignParentTop="true"
+    android:visibility="gone">
+    <ImageView
+        android:id="@+id/Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/back"/>
+    <ImageView
+        android:id="@+id/tanmu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/tanmu"/>
+    <TextView
+        android:id="@+id/mytime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/While"/>
+
+</RelativeLayout>

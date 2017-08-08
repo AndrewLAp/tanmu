@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/video_operation"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="@color/Black"
+    android:layout_alignParentBottom="true"
+    android:visibility="gone">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:background="@color/Transparent"
+        android:layout_marginRight="30dp">
+        <SeekBar
+            android:thumb="@drawable/my_thumb"
+            android:id="@+id/jindu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_gravity="top"
+            style="@style/Widget.SeekBar.Normal"/>
+        <TextView
+            android:id="@+id/videoTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#ffffff"
+            android:textSize="7.5sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="0dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/Transparent"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:id="@+id/kg_tanmu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/dakai"
+            android:layout_gravity="center_vertical"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_gravity="center"
+            android:background="@color/Transparent"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/shangyige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/shangyige"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/view_margin"
+                android:layout_marginLeft="@dimen/view_margin"
+                android:src="@drawable/zanting"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:id="@+id/xiayige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/xiayige"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/qiehuan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/quanping"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+</RelativeLayout>
