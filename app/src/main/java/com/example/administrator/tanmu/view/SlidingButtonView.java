@@ -1,11 +1,12 @@
-package com.example.administrator.tanmu;
+package com.example.administrator.tanmu.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+
+import com.example.administrator.tanmu.R;
 
 /**
  * Created by andrew on 2017/8/5.

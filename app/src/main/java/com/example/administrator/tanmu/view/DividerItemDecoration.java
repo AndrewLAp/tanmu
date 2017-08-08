@@ -1,4 +1,4 @@
-package com.example.administrator.tanmu;
+package com.example.administrator.tanmu.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

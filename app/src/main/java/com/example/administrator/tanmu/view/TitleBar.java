@@ -1,4 +1,4 @@
-package com.example.administrator.tanmu;
+package com.example.administrator.tanmu.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.administrator.tanmu.R;
 
 /**
  * Created by andrew on 2017/8/7.
