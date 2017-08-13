@@ -1,54 +1,106 @@
 package com.example.administrator.tanmu.activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.administrator.tanmu.R;
+import com.example.administrator.tanmu.adapter.AdapterMain;
+import com.example.administrator.tanmu.view.MyRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class dakaishiping extends AppCompatActivity {
-    private Button open_video;
-    private static final String TAG = "dakaishiping";
+    private AdapterMain myAdapter;
+    private FloatingActionButton floatingActionButton;
+    private List<Integer> mdata=new ArrayList<>();
+    private RecyclerView recyclerView;
+    private Toolbar toolbar;
+    private Boolean isRuning;
+    private MyRecyclerView recyclerView_scroll;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dakaishiping);
-        open_video=(Button)findViewById(R.id.openvideo);
-        open_video.setOnClickListener(new View.OnClickListener() {
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
+
+        floatingActionButton=(FloatingActionButton)findViewById(R.id.fab);
+        recyclerView=(RecyclerView)findViewById(R.id.recycler_main);
+        recyclerView_scroll=(MyRecyclerView)findViewById(R.id.recycler_scroll);
+
+        intData();
+        myAdapter=new AdapterMain(mdata,this);
+        RecyclerView.LayoutManager layoutManager=new GridLayoutManager(this,2);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(myAdapter);
+
+
+        final Intent intent=new Intent(this,Video.class);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(dakaishiping.this, Video.class);
-                startActivity(intent);
+                Snackbar.make(view, "打开本地视频", Snackbar.LENGTH_LONG)
+                        .setAction("打开", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(intent);
+                            }
+                        }).show();
             }
         });
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
 
-        super.onConfigurationChanged(newConfig);
-        // 检测屏幕的方向：纵向或横向
-        if (this.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE) {
-            //当前为横屏， 在此处添加额外的处理代码
-            Log.d(TAG, "onConfigurationChanged: 我是横屏");
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar=getSupportActionBar();
+        if (actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.daohang);
         }
-        if (this.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT) {
-            //当前为竖屏， 在此处添加额外的处理代码
-            Log.d(TAG, "onConfigurationChanged: 我是竖屛");
+
+        toolbar.setOverflowIcon(getDrawable(R.drawable.settings));
+    }
+
+    private void intData(){
+        for (int i=0;i<10;i++){
+            mdata.add(i);
         }
-        //检测实体键盘的状态：推出或者合上
-        if (newConfig.hardKeyboardHidden
-                == Configuration.HARDKEYBOARDHIDDEN_NO){
-            //实体键盘处于推出状态，在此处添加额外的处理代码
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings:
+                Toast.makeText(this,"You clicked Backup",Toast.LENGTH_SHORT).show();
+                break;
+            default:
         }
-        if (newConfig.hardKeyboardHidden
-                == Configuration.HARDKEYBOARDHIDDEN_YES){
-            //实体键盘处于合上状态，在此处添加额外的处理代码
-        }
+        return true;
     }
 }
