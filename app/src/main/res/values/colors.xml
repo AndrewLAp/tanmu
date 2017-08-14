@@ -7,4 +7,5 @@
     <color name="Transparent">#00000000</color>
     <color name="Black">#ff000000</color>
     <color name="While">#fff</color>
+    <color name="Green">#70DB93</color>
 </resources>

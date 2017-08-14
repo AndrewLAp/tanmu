@@ -6,6 +6,9 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,19 +24,23 @@ import android.widget.Toast;
 
 import com.example.administrator.tanmu.R;
 import com.example.administrator.tanmu.adapter.AdapterMain;
+import com.example.administrator.tanmu.adapter.AdapterViewPageMain;
+import com.example.administrator.tanmu.view.LayoutDianshiju;
+import com.example.administrator.tanmu.view.LayoutDianying;
+import com.example.administrator.tanmu.view.LayoutDogman;
+import com.example.administrator.tanmu.view.LayoutTuijian;
 import com.example.administrator.tanmu.view.MyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class dakaishiping extends AppCompatActivity {
-    private AdapterMain myAdapter;
+
     private FloatingActionButton floatingActionButton;
-    private List<Integer> mdata=new ArrayList<>();
-    private RecyclerView recyclerView;
+    private ViewPager viewPager;
     private Toolbar toolbar;
-    private Boolean isRuning;
-    private MyRecyclerView recyclerView_scroll;
+    private TabLayout tabLayout;
+    private List<TabLayout.Tab> tabList;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -41,19 +48,16 @@ public class dakaishiping extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dakaishiping);
 
+        initTab();
+
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
             getWindow().setStatusBarColor(Color.BLACK);
         }
 
         floatingActionButton=(FloatingActionButton)findViewById(R.id.fab);
-        recyclerView=(RecyclerView)findViewById(R.id.recycler_main);
-        recyclerView_scroll=(MyRecyclerView)findViewById(R.id.recycler_scroll);
 
-        intData();
-        myAdapter=new AdapterMain(mdata,this);
-        RecyclerView.LayoutManager layoutManager=new GridLayoutManager(this,2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(myAdapter);
+
 
 
         final Intent intent=new Intent(this,Video.class);
@@ -81,11 +85,6 @@ public class dakaishiping extends AppCompatActivity {
         toolbar.setOverflowIcon(getDrawable(R.drawable.settings));
     }
 
-    private void intData(){
-        for (int i=0;i<10;i++){
-            mdata.add(i);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,5 +101,51 @@ public class dakaishiping extends AppCompatActivity {
             default:
         }
         return true;
+    }
+
+    private void initTab(){
+        viewPager=(ViewPager)findViewById(R.id.vp_main);
+        tabLayout=(TabLayout)findViewById(R.id.tab);
+
+        tabList = new ArrayList<>();
+
+        AdapterViewPageMain adapter = new AdapterViewPageMain(getSupportFragmentManager());
+
+        adapter.addFragment(new LayoutTuijian());
+        adapter.addFragment(new LayoutDianying());
+        adapter.addFragment(new LayoutDianshiju());
+        adapter.addFragment(new LayoutDogman());
+
+        viewPager.setAdapter(adapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+
+        tabList.add(tabLayout.getTabAt(0));
+        tabList.add(tabLayout.getTabAt(1));
+        tabList.add(tabLayout.getTabAt(2));
+        tabList.add(tabLayout.getTabAt(3));
+        tabList.get(0).setText("推荐");
+        tabList.get(1).setText("电影");
+        tabList.get(2).setText("电视剧");
+        tabList.get(3).setText("动漫");
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tabLayout.setTabTextColors(
+                        ContextCompat.getColor(dakaishiping.this, R.color.Black),
+                        ContextCompat.getColor(dakaishiping.this, R.color.Green));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }
