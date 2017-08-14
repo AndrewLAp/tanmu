@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="HalfTransparent">#e0000000</color>
+    <color name="HalfTransparent">#80000000</color>
     <color name="Transparent">#00000000</color>
     <color name="Black">#ff000000</color>
     <color name="While">#fff</color>

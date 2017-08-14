@@ -1,7 +1,12 @@
 package com.example.administrator.tanmu.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -15,11 +20,18 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.tanmu.R;
@@ -41,12 +53,25 @@ public class dakaishiping extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private List<TabLayout.Tab> tabList;
+    private PopupWindow mPopupWindow;
+    private ImageView settings;
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dakaishiping);
+
+        settings=(ImageView) findViewById(R.id.settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    showPopupWindow();
+            }
+        });
+
 
         initTab();
 
@@ -82,26 +107,10 @@ public class dakaishiping extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.daohang);
         }
 
-        toolbar.setOverflowIcon(getDrawable(R.drawable.settings));
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.settings:
-                Toast.makeText(this,"You clicked Backup",Toast.LENGTH_SHORT).show();
-                break;
-            default:
-        }
-        return true;
-    }
 
     private void initTab(){
         viewPager=(ViewPager)findViewById(R.id.vp_main);
@@ -148,4 +157,18 @@ public class dakaishiping extends AppCompatActivity {
             }
         });
     }
+
+    private void showPopupWindow(){
+        View contentView = LayoutInflater.from(dakaishiping.this).inflate(R.layout.popuplayout, null);
+        mPopupWindow = new PopupWindow(contentView);
+        mPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.showAsDropDown(settings,0,30);
+
+        mPopupWindow.update();
+    }
+
+
 }
