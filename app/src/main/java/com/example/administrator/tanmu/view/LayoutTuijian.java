@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.administrator.tanmu.R;
 import com.example.administrator.tanmu.adapter.AdapterMain;
+import com.example.administrator.tanmu.object.Yingyong;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class LayoutTuijian extends Fragment {
 
         intData();
         myAdapter=new AdapterMain(mdata,context);
-        RecyclerView.LayoutManager layoutManager=new GridLayoutManager(context,2);
+        RecyclerView.LayoutManager layoutManager=new GridLayoutManager(context,6);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(myAdapter);
 
@@ -52,9 +53,10 @@ public class LayoutTuijian extends Fragment {
 
     private void intData(){
         mdata.clear();
-        for (int i=0;i<10;i++){
+        for (int i=0;i<8;i++){
             mdata.add(i);
         }
+
     }
 
 }

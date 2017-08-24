@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/history"
+            android:title="历史观看"/>
+        <item
+            android:id="@+id/nav_shouchang"
+            android:icon="@drawable/shouchang"
+            android:title="我的收藏"/>
+        <item
+            android:id="@+id/nav_shangchuang"
+            android:icon="@drawable/shangchuang"
+            android:title="我的上传"/>
+        <item
+            android:id="@+id/nav_shezhi"
+            android:icon="@drawable/shezhi"
+            android:title="设置"/>
+
+    </group>
+
+</menu>
