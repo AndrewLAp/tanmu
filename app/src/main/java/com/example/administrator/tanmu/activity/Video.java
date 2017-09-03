@@ -153,37 +153,7 @@ public static List<VideoPath> getmVideoList2(){
     return mVideoList2;
 }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
 
-        super.onConfigurationChanged(newConfig);
-        // 检测屏幕的方向：纵向或横向
-        if (this.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE) {
-            //当前为横屏， 在此处添加额外的处理代码
-
-            adapter=new VideoAdapter(this,mVideoList);
-            adapter.setOnMyClick(this);
-            recyclerView.setAdapter(adapter);
-        }
-        if (this.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT) {
-            //当前为竖屏， 在此处添加额外的处理代码
-
-            adapter=new VideoAdapter(this,mVideoList);
-            adapter.setOnMyClick(this);
-            recyclerView.setAdapter(adapter);
-        }
-        //检测实体键盘的状态：推出或者合上
-        if (newConfig.hardKeyboardHidden
-                == Configuration.HARDKEYBOARDHIDDEN_NO){
-            //实体键盘处于推出状态，在此处添加额外的处理代码
-        }
-        if (newConfig.hardKeyboardHidden
-                == Configuration.HARDKEYBOARDHIDDEN_YES){
-            //实体键盘处于合上状态，在此处添加额外的处理代码
-        }
-    }
 
     private void readVideoPath(){
         ContentResolver contentResolver = this.getContentResolver();

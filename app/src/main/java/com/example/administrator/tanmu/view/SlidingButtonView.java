@@ -63,7 +63,6 @@ public class SlidingButtonView extends HorizontalScrollView {
         int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-
             case MotionEvent.ACTION_UP:
                 changeScrollx();
                 return true;

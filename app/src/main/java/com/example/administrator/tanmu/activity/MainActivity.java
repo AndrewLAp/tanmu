@@ -600,7 +600,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 AudioManager am=(AudioManager)getSystemService(this.AUDIO_SERVICE);
                 int MaxVolum=am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                 int Volum=am.getStreamVolume(AudioManager.STREAM_MUSIC);
-                float percent=length_Y/(height*(float)1.5);
+                float percent=length_Y/height/2;
                 float fchangeVolum=MaxVolum*percent;
                 if(fchangeVolum>MaxVolum){
                     fchangeVolum=MaxVolum;
@@ -618,18 +618,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 ContentResolver cr = this.getContentResolver();
                 try {
                     value = Settings.System.getInt(cr, Settings.System.SCREEN_BRIGHTNESS);
+                    float changLight=length_Y/height;
+                    WindowManager.LayoutParams lpa = this.getWindow().getAttributes();
+                    if (qishi_position_Y>jiesu_position_Y){
+                        lpa.screenBrightness=value/255+changLight;
+                        this.getWindow().setAttributes(lpa);
+                    }else {
+                        lpa.screenBrightness=value/255-changLight;
+                        this.getWindow().setAttributes(lpa);
+                    }
                 } catch (Settings.SettingNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-                }
-                float changLight=length_Y/height;
-                WindowManager.LayoutParams lpa = this.getWindow().getAttributes();
-                if (qishi_position_Y>jiesu_position_Y){
-                    lpa.screenBrightness=+changLight;
-                    this.getWindow().setAttributes(lpa);
-                }else {
-                    lpa.screenBrightness=-changLight;
-                    this.getWindow().setAttributes(lpa);
-                }
 
 
 

@@ -53,7 +53,7 @@ public class LayoutTuijian extends Fragment {
 
     private void intData(){
         mdata.clear();
-        for (int i=0;i<8;i++){
+        for (int i=0;i<12;i++){
             mdata.add(i);
         }
 

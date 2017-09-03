@@ -24,9 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Video"
+        <activity
+            android:name=".activity.Video"
             android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize"></activity>
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
