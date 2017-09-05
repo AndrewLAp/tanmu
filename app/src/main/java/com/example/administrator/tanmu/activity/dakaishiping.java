@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -243,4 +244,6 @@ public class dakaishiping extends AppCompatActivity {
        }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }
