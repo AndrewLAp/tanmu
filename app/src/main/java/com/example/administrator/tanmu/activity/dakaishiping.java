@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.administrator.tanmu.R;
 import com.example.administrator.tanmu.adapter.AdapterViewPageMain;
 import com.example.administrator.tanmu.adapter.SearchListAdaoter;
+import com.example.administrator.tanmu.object.Person;
 import com.example.administrator.tanmu.object.SearchImformation;
 import com.example.administrator.tanmu.view.LayoutDianshiju;
 import com.example.administrator.tanmu.view.LayoutDianying;
@@ -44,6 +45,10 @@ import com.example.administrator.tanmu.view.MySwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class dakaishiping extends AppCompatActivity {
 
@@ -89,7 +94,25 @@ public class dakaishiping extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bmob.initialize(this, "df610b845570afeeebc1a17eb36e726d");
+
         setContentView(R.layout.activity_dakaishiping);
+
+        Person p2 = new Person();
+        p2.setName("lucky");
+        p2.setAddress("北京海淀");
+        p2.save(new SaveListener<String>() {
+            @Override
+            public void done(String objectId,BmobException e) {
+                if(e==null){
+                    Toast.makeText(dakaishiping.this,"添加数据成功，返回objectId为："+objectId,Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(dakaishiping.this,"创建数据失败：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         searchView = (SearchView) findViewById(R.id.searchBar);
         listView = (ListView) findViewById(R.id.search_list);
