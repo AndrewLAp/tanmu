@@ -9,8 +9,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.administrator.tanmu.R;
-import com.example.administrator.tanmu.util.Utils;
 import com.example.administrator.tanmu.object.VideoPath;
+import com.example.administrator.tanmu.util.Utils;
 import com.example.administrator.tanmu.view.SlidingButtonView;
 
 import java.io.File;
@@ -92,35 +92,15 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
         });
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-
-        public TextView btn_Delete;
-        public TextView textView;
-        public ViewGroup layout_content;
-        public CheckBox checkBox;
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            btn_Delete = (TextView) itemView.findViewById(R.id.tv_delete);
-            textView = (TextView) itemView.findViewById(R.id.video_path);
-            checkBox=(CheckBox) itemView.findViewById(R.id.checkbox);
-            layout_content = (ViewGroup) itemView.findViewById(R.id.layout_content);
-
-            ((SlidingButtonView) itemView).setSlidingButtonListener(VideoAdapter.this);
-        }
-    }
-
     @Override
     public int getItemCount() {
         return mDatas.size();
     }
 
-
-
     @Override
     public void onMenuIsOpen(SlidingButtonView view) {
         mMenu = view;
     }
-
 
     /**
      * 关闭菜单
@@ -130,6 +110,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
         mMenu = null;
 
     }
+
     /**
      * 判断是否有菜单打开
      */
@@ -147,6 +128,24 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
     public interface onMyClick{
         void longClick(View view,int position);
         void Click(View view,int position,Boolean isCheck);
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView btn_Delete;
+        public TextView textView;
+        public ViewGroup layout_content;
+        public CheckBox checkBox;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            btn_Delete = (TextView) itemView.findViewById(R.id.tv_delete);
+            textView = (TextView) itemView.findViewById(R.id.video_path);
+            checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
+            layout_content = (ViewGroup) itemView.findViewById(R.id.layout_content);
+
+            ((SlidingButtonView) itemView).setSlidingButtonListener(VideoAdapter.this);
+        }
     }
 
 }

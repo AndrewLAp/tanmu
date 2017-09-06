@@ -7,10 +7,11 @@ import android.view.View;
  */
 
 public class VideoPath {
+    public int isVisibility = View.GONE;
     String videoPath;
     String videoName;
     Boolean isCheck=false;
-    public int isVisibility= View.GONE;
+
     public String getVideoPath(){
         return videoPath;
     }

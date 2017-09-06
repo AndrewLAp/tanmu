@@ -11,11 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,6 +53,10 @@ import master.flame.danmaku.ui.widget.DanmakuView;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener{
     private static final String TAG = "MainActivity";
+    GestureDetector gestureDetector;
+    RelativeLayout mLayout;
+    int width;
+    int height;
     private boolean showDanmaku;
     private DanmakuView danmakuView;
     private DanmakuContext danmakuContext;
@@ -67,6 +71,28 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ImageView qiehuan_button;
     private ImageView tanmu_button;
     private TextView mytime;
+    final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                    break;
+                case 2:
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    String sysTimeStr;
+                    if (minute < 10) {
+                        sysTimeStr = hour + ":" + "0" + minute;
+                    } else {
+                        sysTimeStr = hour + ":" + minute;
+                    }
+
+                    mytime.setText(sysTimeStr);
+            }
+        }
+    };
     private ImageView kg_tanmu;
     private ImageView back;
     private VideoView videoView;
@@ -84,46 +110,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ColorDrawable video_operationCDrawable;
     private ColorDrawable operationBCDrawable;
     private ColorDrawable operationTCDrawable;
-
-    GestureDetector gestureDetector;
-    RelativeLayout mLayout;
-
-    int width;
-    int height;
-
     private BaseDanmakuParser parser=new BaseDanmakuParser() {
         @Override
         protected IDanmakus parse() {
             return new Danmakus();
         }
     };
-
-
-
-    final Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                    break;
-                case 2:
-                    Calendar c = Calendar.getInstance();
-                    int hour = c.get(Calendar.HOUR_OF_DAY);
-                    int minute = c.get(Calendar.MINUTE);
-                    String sysTimeStr;
-                    if (minute<10){
-                        sysTimeStr=hour+":"+"0"+minute;
-                    }else {
-                        sysTimeStr=hour+":"+minute;
-                    }
-
-                    mytime.setText(sysTimeStr);
-            }
-        }
-    };
-
-
     private StringBuilder mFormatBuilder= new StringBuilder();
     private Formatter mFormatter= new Formatter(mFormatBuilder, Locale.getDefault());
     private String stringForTime(int timeMs) {

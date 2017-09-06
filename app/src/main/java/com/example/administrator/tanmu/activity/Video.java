@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,11 +18,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.administrator.tanmu.view.DividerItemDecoration;
 import com.example.administrator.tanmu.R;
-import com.example.administrator.tanmu.view.TitleBar;
 import com.example.administrator.tanmu.adapter.VideoAdapter;
 import com.example.administrator.tanmu.object.VideoPath;
+import com.example.administrator.tanmu.view.DividerItemDecoration;
+import com.example.administrator.tanmu.view.TitleBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,10 +30,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Video extends AppCompatActivity implements VideoAdapter.onMyClick {
+    public static List<VideoPath> mVideoList2;
     private RecyclerView recyclerView;
     private  List<VideoPath> mVideoList=new ArrayList<>();
     private  VideoAdapter adapter;
-    public static List<VideoPath> mVideoList2;
     private LinearLayout piliang_operation;
     private Button delete;
     private Button selecteAll;
@@ -42,6 +41,9 @@ public class Video extends AppCompatActivity implements VideoAdapter.onMyClick {
     private Boolean isShow=false;
     private Boolean isSelecteAll=false;
 
+    public static List<VideoPath> getmVideoList2() {
+        return mVideoList2;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +151,6 @@ public class Video extends AppCompatActivity implements VideoAdapter.onMyClick {
         });
 
     }
-public static List<VideoPath> getmVideoList2(){
-    return mVideoList2;
-}
-
-
 
     private void readVideoPath(){
         ContentResolver contentResolver = this.getContentResolver();
