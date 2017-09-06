@@ -115,10 +115,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
      * 判断是否有菜单打开
      */
     public Boolean menuIsOpen() {
-        if(mMenu != null){
-            return true;
-        }
-        return false;
+        return mMenu != null;
     }
 
     public void setOnMyClick(onMyClick onMyClick){

@@ -598,9 +598,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }else {
                 videoView.seekTo(progress-kuaijin);
             }
-        }else{;
+        } else {
             if (qishi_position_X>3*width/4&&length_Y>length_X){
-                AudioManager am=(AudioManager)getSystemService(this.AUDIO_SERVICE);
+                AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
                 int MaxVolum=am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                 int Volum=am.getStreamVolume(AudioManager.STREAM_MUSIC);
                 float percent=length_Y/height/2;
