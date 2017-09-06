@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private TextView videoTimeText;
     private int i=0;
     private int j=0;
+    private int k=0;
     private String videoPath;
     private String videoName;
     private List<VideoPath> videoList;
@@ -392,8 +393,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         tanmu_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 video_operation.setVisibility(View.GONE);
-                operation.setVisibility(View.VISIBLE);
+                if (k==0){
+                    video_operation.setVisibility(View.GONE);
+                    operation.setVisibility(View.VISIBLE);
+                    k++;
+                }else {
+                    video_operation.setVisibility(View.VISIBLE);
+                    operation.setVisibility(View.GONE);
+                    k--;
+                }
+
             }
         });
 
@@ -549,11 +558,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //当前为横屏， 在此处添加额外的处理代码
             Log.d(TAG, "onConfigurationChanged: 我是横屏");
+            qiehuan_button.setImageResource(R.drawable.suoxiao);
 
         }
         else if (newConfig.orientation==Configuration.ORIENTATION_PORTRAIT) {
             //当前为竖屏， 在此处添加额外的处理代码
             Log.d(TAG, "onConfigurationChanged: 我是竖屛");
+            qiehuan_button.setImageResource(R.drawable.quanping);
         }
 
 

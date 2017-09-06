@@ -76,7 +76,7 @@
 
             </android.support.design.widget.TabLayout>
 
-            <android.support.v4.widget.SwipeRefreshLayout
+            <com.example.administrator.tanmu.view.MySwipeRefreshLayout
                 android:id="@+id/swipe_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -89,27 +89,11 @@
                     android:layout_height="wrap_content">
                 </android.support.v4.view.ViewPager>
 
-            </android.support.v4.widget.SwipeRefreshLayout>
+            </com.example.administrator.tanmu.view.MySwipeRefreshLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/search_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:visibility="gone">
-
-            <android.support.v7.widget.SearchView
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:iconifiedByDefault="false"
-                app:queryHint="请输入搜索内容">
-
-            </android.support.v7.widget.SearchView>
-        </LinearLayout>
-
+        <include layout="@layout/layout_search"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

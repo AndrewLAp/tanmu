@@ -35,6 +35,7 @@ import com.example.administrator.tanmu.view.LayoutDianying;
 import com.example.administrator.tanmu.view.LayoutDogman;
 import com.example.administrator.tanmu.view.LayoutTuijian;
 import com.example.administrator.tanmu.view.LayoutZongyi;
+import com.example.administrator.tanmu.view.MySwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class dakaishiping extends AppCompatActivity {
     private LinearLayout search_layout;
     private LinearLayout layout_main;
     private DrawerLayout mDrawerLayout;
-    private SwipeRefreshLayout swipeRefresh;
+    private MySwipeRefreshLayout swipeRefresh;
 
 
 
@@ -63,7 +64,7 @@ public class dakaishiping extends AppCompatActivity {
         setContentView(R.layout.activity_dakaishiping);
 
 
-        swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
+        swipeRefresh=(MySwipeRefreshLayout)findViewById(R.id.swipe_refresh);
         mDrawerLayout=(DrawerLayout)findViewById(R.id.draw_layout);
         layout_main=(LinearLayout)findViewById(R.id.layout_main);
         search_layout=(LinearLayout)findViewById(R.id.search_layout);

@@ -39,7 +39,7 @@ public class LayoutTuijian extends Fragment {
         layoutTUijian = inflater.inflate(R.layout.layout_tuijian, container, false);
 
         context=getContext();
-        recyclerView=(RecyclerView)layoutTUijian.findViewById(R.id.recycler_main);
+        recyclerView=(RecyclerView) layoutTUijian.findViewById(R.id.recycler_main);
 
         intData();
         myAdapter=new AdapterMain(mdata,context);
