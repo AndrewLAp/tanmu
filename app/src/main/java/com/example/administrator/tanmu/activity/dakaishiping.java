@@ -96,7 +96,6 @@ public class dakaishiping extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Bmob.initialize(this, "df610b845570afeeebc1a17eb36e726d");
-
         setContentView(R.layout.activity_dakaishiping);
 
         Person p2 = new Person();
@@ -104,15 +103,14 @@ public class dakaishiping extends AppCompatActivity {
         p2.setAddress("北京海淀");
         p2.save(new SaveListener<String>() {
             @Override
-            public void done(String objectId,BmobException e) {
-                if(e==null){
-                    Toast.makeText(dakaishiping.this,"添加数据成功，返回objectId为："+objectId,Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(dakaishiping.this,"创建数据失败：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            public void done(String objectId, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(dakaishiping.this, "添加数据成功，返回objectId为：" + objectId, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(dakaishiping.this, "创建数据失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
         searchView = (SearchView) findViewById(R.id.searchBar);
         listView = (ListView) findViewById(R.id.search_list);
