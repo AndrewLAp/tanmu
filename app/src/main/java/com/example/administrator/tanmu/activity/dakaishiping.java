@@ -1,16 +1,31 @@
 package com.example.administrator.tanmu.activity;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -20,22 +35,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.tanmu.R;
 import com.example.administrator.tanmu.adapter.AdapterViewPageMain;
 import com.example.administrator.tanmu.adapter.SearchListAdaoter;
-import com.example.administrator.tanmu.object.Person;
 import com.example.administrator.tanmu.object.SearchImformation;
+import com.example.administrator.tanmu.util.DensityUtil;
 import com.example.administrator.tanmu.view.LayoutDianshiju;
 import com.example.administrator.tanmu.view.LayoutDianying;
 import com.example.administrator.tanmu.view.LayoutDogman;
@@ -43,15 +62,20 @@ import com.example.administrator.tanmu.view.LayoutTuijian;
 import com.example.administrator.tanmu.view.LayoutZongyi;
 import com.example.administrator.tanmu.view.MySwipeRefreshLayout;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.BmobUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class dakaishiping extends AppCompatActivity {
 
+    private static final int TAKE_PHOTO = 1;
+    private static final int CHOOSE_PHOTO = 2;
     private FloatingActionButton floatingActionButton;
     private ViewPager viewPager;
     private Toolbar toolbar;
@@ -60,11 +84,17 @@ public class dakaishiping extends AppCompatActivity {
     private PopupWindow mPopupWindow;
     private ImageView settings;
     private ImageView search;
+    private CircleImageView user_icon;
+    private Button tuichu;
+    private TextView user_name;
+    private View headerView;
+    private NavigationView navigationView;
+    private LinearLayout bendi_layout;
+    private LinearLayout paishe_layout;
     private LinearLayout search_layout;
     private LinearLayout layout_main;
     private DrawerLayout mDrawerLayout;
     private MySwipeRefreshLayout swipeRefresh;
-
     //搜索框初始化
     private SearchView searchView;
     private ListView listView;
@@ -73,6 +103,9 @@ public class dakaishiping extends AppCompatActivity {
     private List<String> nameList;
     private SearchListAdaoter adapter;
     private SearchListAdaoter findAdapter;
+    private String userName;
+    private Uri imageUri;
+    private Window window;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -98,25 +131,60 @@ public class dakaishiping extends AppCompatActivity {
         Bmob.initialize(this, "df610b845570afeeebc1a17eb36e726d");
         setContentView(R.layout.activity_dakaishiping);
 
-        Person p2 = new Person();
-        p2.setName("lucky");
-        p2.setAddress("北京海淀");
-        p2.save(new SaveListener<String>() {
-            @Override
-            public void done(String objectId, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(dakaishiping.this, "添加数据成功，返回objectId为：" + objectId, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(dakaishiping.this, "创建数据失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        bendi_layout = (LinearLayout) findViewById(R.id.bendi_layout);
+        paishe_layout = (LinearLayout) findViewById(R.id.paishe_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        headerView = LayoutInflater.from(this).inflate(R.layout.nav_header, null);
+        navigationView.addHeaderView(headerView);
+        tuichu = (Button) headerView.findViewById(R.id.tuichu_denglu);
+        user_icon = (CircleImageView) headerView.findViewById(R.id.icon_image);
+        user_name = (TextView) headerView.findViewById(R.id.user_name);
+        SharedPreferences pref = getSharedPreferences("User", MODE_PRIVATE);
+        userName = pref.getString("username", "点击头像登陆");
+        user_name.setText(userName);
+        if (userName != "点击头像登陆") {
+            tuichu.setVisibility(View.VISIBLE);
+        } else {
+            tuichu.setVisibility(View.GONE);
+        }
 
         searchView = (SearchView) findViewById(R.id.searchBar);
         listView = (ListView) findViewById(R.id.search_list);
         findList = new ArrayList<SearchImformation>();
         nameList = new ArrayList<String>();
         searchView.setSubmitButtonEnabled(true);
+
+
+        tuichu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BmobUser.logOut();
+                user_name.setText("点击头像登陆");
+                user_icon.setImageResource(R.drawable.kongbai);
+                tuichu.setVisibility(View.GONE);
+                SharedPreferences.Editor editor = getSharedPreferences("User", MODE_PRIVATE).edit();
+                editor.putString("username", null);
+                editor.apply();
+                Toast.makeText(dakaishiping.this, "已退出登陆", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        user_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user_name.getText() == "点击头像登陆") {
+                    finish();
+                    Intent intent = new Intent(dakaishiping.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    if (ContextCompat.checkSelfPermission(dakaishiping.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(dakaishiping.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    }
+                    show2();
+                }
+
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             //输入完成后，提交时触发的方法，一般情况是点击输入法中的搜索按钮才会触发，表示现在正式提交了
@@ -377,9 +445,7 @@ public class dakaishiping extends AppCompatActivity {
         floatingActionButton=(FloatingActionButton)findViewById(R.id.fab);
 
 
-
-
-        final Intent intent=new Intent(this,Video.class);
+        final Intent intent2 = new Intent(this, Video.class);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -387,7 +453,7 @@ public class dakaishiping extends AppCompatActivity {
                         .setAction("打开", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                startActivity(intent);
+                                startActivity(intent2);
                             }
                         }).show();
             }
@@ -432,6 +498,71 @@ public class dakaishiping extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    private void show2() {
+        final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.button_dialog, null);
+        bottomDialog.setContentView(contentView);
+
+        Window window = bottomDialog.getWindow();
+        bendi_layout = (LinearLayout) window.findViewById(R.id.bendi_layout);
+        paishe_layout = (LinearLayout) window.findViewById(R.id.paishe_layout);
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
+        params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this, 16f);
+        params.bottomMargin = DensityUtil.dp2px(this, 8f);
+        contentView.setLayoutParams(params);
+        bottomDialog.setCanceledOnTouchOutside(true);
+        bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+        bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+        bottomDialog.show();
+
+
+        bendi_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAlbum();
+                bottomDialog.dismiss();
+            }
+        });
+
+
+        paishe_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takeIcon();
+                bottomDialog.dismiss();
+            }
+        });
+
+    }
+
+    private void takeIcon() {
+        File outputImage = new File(getExternalCacheDir(), "out_image.jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageUri = FileProvider.getUriForFile(dakaishiping.this, "com.example.caeraalbumtext", outputImage);
+        } else {
+            imageUri = Uri.fromFile(outputImage);
+        }
+
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO);
     }
 
     private void initTab(){
@@ -509,5 +640,93 @@ public class dakaishiping extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        user_icon.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        handleImageOnKitKat(data);
+                    } else {
+                        handlerImageBeforeKitKat(data);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        if (DocumentsContract.isDocumentUri(this, uri)) ;
+        String docId = DocumentsContract.getDocumentId(uri);
+        if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+            String id = docId.split(":")[1];
+            String selection = MediaStore.Images.Media._ID + "=" + id;
+            imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+        } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+            Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+            imagePath = getImagePath(contentUri, null);
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath);
+    }
+
+    private void handlerImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            user_icon.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "图片加载失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    //takeIcon();
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "你未授权", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+    }
 }

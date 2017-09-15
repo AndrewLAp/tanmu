@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.LoginActivity">
+
+    <com.example.administrator.tanmu.view.TitleBar
+        android:id="@+id/denglu_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:leftText="返回"
+        app:leftTextColor="@color/While"
+        app:rightTextColor="@color/While"
+        app:titleText="登陆账号"
+        app:titleTextColor="@color/While">
+
+    </com.example.administrator.tanmu.view.TitleBar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/sname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="帐号" />
+
+        <EditText
+            android:id="@+id/spassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="密码"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spassword"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="38dp"
+            android:onClick="dlogin"
+            android:text="登录" />
+
+        <Button
+            android:id="@+id/zhuche1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/login"
+            android:layout_marginLeft="20dp"
+            android:onClick="dregi"
+            android:text="注册" />
+    </LinearLayout>
+
+
+</LinearLayout>
