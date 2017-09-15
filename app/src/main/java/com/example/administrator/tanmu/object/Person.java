@@ -11,6 +11,7 @@ public class Person extends BmobUser {
     private Boolean sex;
     private String nick;
     private Integer age;
+    private String imagePath;
 
     public boolean getSex() {
         return this.sex;
@@ -36,4 +37,10 @@ public class Person extends BmobUser {
         this.age = age;
     }
 
+    public String getImagePath(){
+        return imagePath;
+    }
+    public void setImagePath(String imagePath){
+        this.imagePath=imagePath;
+    }
 }

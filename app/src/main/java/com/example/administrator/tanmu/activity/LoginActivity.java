@@ -1,7 +1,6 @@
 package com.example.administrator.tanmu.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.administrator.tanmu.R;
+import com.example.administrator.tanmu.object.Person;
 import com.example.administrator.tanmu.view.TitleBar;
 
 import cn.bmob.v3.Bmob;
@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         denglu_title.setTitleBarClickListetner(new TitleBar.titleBarClickListener() {
             @Override
             public void leftButtonClick() {
+                Intent intent=new Intent(LoginActivity.this,dakaishiping.class);
+                startActivity(intent);
                 finish();
             }
 
@@ -78,18 +80,16 @@ public class LoginActivity extends AppCompatActivity {
         String password = mpassword.getText().toString();
         person.setUsername(name);
         person.setPassword(password);
-        person.login(new SaveListener<BmobUser>() {
+        person.login(new SaveListener<Person>() {
 
             @Override
-            public void done(BmobUser bmobUser, BmobException e) {
+            public void done(Person bmobUser, BmobException e) {
                 if (e == null) {
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, dakaishiping.class);
-                    SharedPreferences.Editor editor = getSharedPreferences("User", MODE_PRIVATE).edit();
-                    editor.putString("username", name);
-                    editor.apply();
                     finish();
                     startActivity(intent);
+
                 } else {
                     Toast.makeText(LoginActivity.this, "账号密码错误", Toast.LENGTH_SHORT).show();
                 }

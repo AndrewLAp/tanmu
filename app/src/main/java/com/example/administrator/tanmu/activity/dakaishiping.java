@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -42,7 +41,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -53,6 +51,7 @@ import android.widget.Toast;
 import com.example.administrator.tanmu.R;
 import com.example.administrator.tanmu.adapter.AdapterViewPageMain;
 import com.example.administrator.tanmu.adapter.SearchListAdaoter;
+import com.example.administrator.tanmu.object.Person;
 import com.example.administrator.tanmu.object.SearchImformation;
 import com.example.administrator.tanmu.util.DensityUtil;
 import com.example.administrator.tanmu.view.LayoutDianshiju;
@@ -70,6 +69,8 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class dakaishiping extends AppCompatActivity {
@@ -85,7 +86,6 @@ public class dakaishiping extends AppCompatActivity {
     private ImageView settings;
     private ImageView search;
     private CircleImageView user_icon;
-    private Button tuichu;
     private TextView user_name;
     private View headerView;
     private NavigationView navigationView;
@@ -107,6 +107,8 @@ public class dakaishiping extends AppCompatActivity {
     private Uri imageUri;
     private Window window;
 
+    private Bundle savedInstanceState;
+
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -126,6 +128,7 @@ public class dakaishiping extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.savedInstanceState=savedInstanceState;
         super.onCreate(savedInstanceState);
 
         Bmob.initialize(this, "df610b845570afeeebc1a17eb36e726d");
@@ -136,17 +139,24 @@ public class dakaishiping extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerView = LayoutInflater.from(this).inflate(R.layout.nav_header, null);
         navigationView.addHeaderView(headerView);
-        tuichu = (Button) headerView.findViewById(R.id.tuichu_denglu);
         user_icon = (CircleImageView) headerView.findViewById(R.id.icon_image);
         user_name = (TextView) headerView.findViewById(R.id.user_name);
-        SharedPreferences pref = getSharedPreferences("User", MODE_PRIVATE);
-        userName = pref.getString("username", "点击头像登陆");
-        user_name.setText(userName);
-        if (userName != "点击头像登陆") {
-            tuichu.setVisibility(View.VISIBLE);
-        } else {
-            tuichu.setVisibility(View.GONE);
+
+        Person person=BmobUser.getCurrentUser(Person.class);
+        if (person!=null){
+            if (person.getImagePath()!=null){
+                Bitmap bitmap = BitmapFactory.decodeFile(person.getImagePath());
+                user_icon.setImageBitmap(bitmap);
+            }else {
+                user_icon.setImageResource(R.drawable.kongbai);
+            }
+            user_name.setText(person.getUsername());
+
+        }else {
+            user_icon.setImageResource(R.drawable.kongbai);
+            user_name.setText("点击头像登陆");
         }
+
 
         searchView = (SearchView) findViewById(R.id.searchBar);
         listView = (ListView) findViewById(R.id.search_list);
@@ -155,24 +165,26 @@ public class dakaishiping extends AppCompatActivity {
         searchView.setSubmitButtonEnabled(true);
 
 
-        tuichu.setOnClickListener(new View.OnClickListener() {
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                BmobUser.logOut();
-                user_name.setText("点击头像登陆");
-                user_icon.setImageResource(R.drawable.kongbai);
-                tuichu.setVisibility(View.GONE);
-                SharedPreferences.Editor editor = getSharedPreferences("User", MODE_PRIVATE).edit();
-                editor.putString("username", null);
-                editor.apply();
-                Toast.makeText(dakaishiping.this, "已退出登陆", Toast.LENGTH_SHORT).show();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_shezhi:
+                        Intent intent=new Intent(dakaishiping.this,SettingActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                }
+                return false;
             }
         });
 
         user_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user_name.getText() == "点击头像登陆") {
+                Person person=BmobUser.getCurrentUser(Person.class);
+                if (person==null) {
                     finish();
                     Intent intent = new Intent(dakaishiping.this, LoginActivity.class);
                     startActivity(intent);
@@ -648,6 +660,14 @@ public class dakaishiping extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
                         user_icon.setImageBitmap(bitmap);
+                        Person person=BmobUser.getCurrentUser(Person.class);
+                        person.setImagePath(imageUri.getPath());
+                        person.update(person.getObjectId(),new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+
+                            }
+                        });
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -710,6 +730,15 @@ public class dakaishiping extends AppCompatActivity {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             user_icon.setImageBitmap(bitmap);
+            Person person=BmobUser.getCurrentUser(Person.class);
+            person.setImagePath(imagePath);
+            person.update(person.getObjectId(),new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+
+                }
+            });
+
         } else {
             Toast.makeText(this, "图片加载失败", Toast.LENGTH_SHORT).show();
         }
@@ -729,4 +758,6 @@ public class dakaishiping extends AppCompatActivity {
             default:
         }
     }
+
+
 }

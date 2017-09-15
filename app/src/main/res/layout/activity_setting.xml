@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.example.administrator.tanmu.view.TitleBar
+        android:id="@+id/denglu_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:leftText="返回"
+        app:leftTextColor="@color/While"
+        app:rightTextColor="@color/While"
+        app:titleText="设置"
+        app:titleTextColor="@color/While">
+
+    </com.example.administrator.tanmu.view.TitleBar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/setting_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>
